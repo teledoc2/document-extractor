@@ -1,0 +1,155 @@
+{
+  "confidence_score": 0.95,
+  "document_type": "UCAF Medical Form",
+  "ocr_contents": {
+    "insuranceApproval": {
+      "comments": "",
+      "approvedDisapprovedBy": "",
+      "signature": "",
+      "date": "",
+      "approvalValidity": "30 Days",
+      "approvalNo": "5090041",
+      "notApproved": false,
+      "approved": true
+    },
+    "completedBy": {
+      "signature": "",
+      "date": ""
+    },
+    "certification": {
+      "o": false,
+      "nameAndRelationship": "",
+      "stamp": false,
+      "signature": false,
+      "physician": ""
+    },
+    "caseManagementForm": {
+      "estimatedGross": 700,
+      "estimatedCost": 316.28,
+      "totalApprovedCost": 200,
+      "possibleLineOfManagement": "",
+      "estimatedLengthOfStay": "",
+      "expectedDateOfAdmission": "",
+      "providerComments": "",
+      "caseManagementFormIncluded": false
+    },
+    "medications": [
+      {
+        "name": "",
+        "type": "",
+        "quantity": "",
+        "note": "No: Data To Be Shown"
+      }
+    ],
+    "services": [
+      {
+        "cost (service)": 316.28,
+        "type": "Imaging",
+        
+        "approvedCost": 200,
+        "totalQuantity": 1,
+        "quantity": 1,
+        "approvedQuantity": 1,
+        "nonStandardCode": "",
+        "code": "56013-00 00",
+        "status": "Approved",
+        "description": "Computerised tomography of orbit - (11003) CT Orbits",
+        
+        "note": "No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions claim audit"
+      }
+    ],
+    "management": {
+      "pregnancy": false,
+      "infertility": false,
+      "psychiatric": false,
+      "checkUp": false,
+      "vaccination": false,
+      "workRelated": false,
+      "rta": false,
+      "congenital": false,
+      "chronic": false
+    },
+    "diagnosis": {
+      "diagnosis": "",
+      "secondCode": "",
+      "thirdCode": "",
+      "fourthCode": "",
+      "fifthCode": "",
+      "sixthCode": "",
+      "principalCode": "H05-Disorders of orbit"
+    },
+    "visitDetails": {
+      "emergencyCareLevel": "",
+      "pulse": "",
+      "weight": "",
+      "height": "",
+      "rr": "",
+      "durationOfIllness": "",
+      "significantSigns": "",
+      "possibleLineOfTreatment": "",
+      "otherConditions": "",
+      "familyHistory": "",
+      "physicalFindings": "",
+      "bp": "-",
+      "temperature": "34.5",
+      "chiefComplaints": "DIMINISHED VISYAL ACUITY DAYS FOLLWING RYPTURE",
+      "physicianName": "KHALED ALY",
+      "emergencyCase": false,
+      "outpatient": true,
+      "inpatient": false
+    },
+    "patient": {
+      "gender": "",
+      "age": "8 Year",
+      "sex": "Male"
+    },
+    "insured": {
+      "documentId": "",
+      "memberSince": "",
+      "memberType": "",
+      "entryDate": "",
+      "notes": "",
+      "policyHolder": "٠ مدارس مناهج الابداع العالمية",
+      "expiryDate": "26/08/2025 12:00:00 AM",
+      "approvalReferrenceNumber": "5090041",
+      "idCardNo": "9955697",
+      "policyNo": "1040034578",
+      "nationalId": "2423850268",
+      "insuredName": "aakif ahamed samsudeen imtiyas",
+      "adjudicationPayer": "Additional adjudication Payer: No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions & claim audit",
+      "approval": "Approved",
+      "approvalStatus": "Approved",
+      "class_": "Basic M.1.Z2",
+      "message": "No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions claim audit",
+      "approvalType": "Professional"
+    },
+    "provider": {
+      "referral": false,
+      "walkIn": false,
+      "refill": false,
+      "followUp": false,
+      "newVisit": true,
+      "married": false,
+      "single": false,
+      "tpaCompanyName": "",
+      "patientFileNumber": "",
+      "planType": "",
+      "referralPreAuthProvider": "",
+      "pharmacy": "",
+      "dateOfVisit": "01/03/2025 10:15:00 AM",
+      "approvalDateTime": "01/03/2025 10:18:45",
+      "approvalValidity": "30 Days",
+      "insuranceCompanyName": "Alrajhi Takaful",
+      "providerName": "Consultant Radiologists (Riyadh Scan)",
+      "dept": "Radiology Specialty"
+    }
+  },
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "topics": [
+    "medical_form"
+  ],
+  "file_name": "temp_c5ecdbc8-ad7a-4f81-a1ba-022ea3a61235.md"
+}

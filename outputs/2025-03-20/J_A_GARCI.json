@@ -1,0 +1,141 @@
+{
+  "file_name": "temp_f0878512-3140-47b4-97fa-f24aa8e35547.md",
+  "topics": [
+    "medical_form"
+  ],
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "ocr_contents": {
+    "provider": {
+      "providerName": "AL-ALAMI Medical Complex",
+      "insuranceCompanyName": "The Mediterranean and Gulf Cooperative Insurance and",
+      "tpaCompanyName": "",
+      "patientFileNumber": "",
+      "dept": "professional - 10.00 - Obstetrics Gynecology Specialty",
+      "single": false,
+      "married": true,
+      "planType": "EHCPOL",
+      "dateOfVisit": "15/01/2025",
+      "newVisit": false,
+      "followUp": false,
+      "refill": false,
+      "walkIn": false,
+      "approvalDateTime": "",
+      "approvalValidity": "",
+      "referral": false,
+      "referralPreAuthProvider": "AL DAWA MEDICAL SERVICES CO. LTD",
+      "pharmacy": "KHOBAR"
+    },
+    "insured": {
+      "insuredName": "JASMIN APUSIN GARCI",
+      "documentId": "2268114606",
+      "idCardNo": "3509105",
+      "nationalId": "",
+      "policyNo": "17444100",
+      "memberSince": "",
+      "memberType": "",
+      "expiryDate": "2025-11-05",
+      "policyHolder": "",
+      "entryDate": "",
+      "class_": "",
+      "approval": "2025/513411",
+      "approvalReferrenceNumber": "",
+      "approvalStatus": "partial",
+      "approvalType": "",
+      "message": "",
+      "notes": "",
+      "adjudicationPayer": "",
+      "payer": ""
+    },
+    "patient": {
+      "sex": "FEMALE",
+      "age": "40",
+      "gender": ""
+    },
+    "visitDetails": {
+      "inpatient": false,
+      "outpatient": true,
+      "emergencyCase": false,
+      "emergencyCareLevel": "",
+      "physicianName": "",
+      "bp": "null/null",
+      "pulse": "",
+      "temperature": "",
+      "weight": "",
+      "height": "",
+      "rr": "",
+      "durationOfIllness": "",
+      "chiefComplaints": "(N64.9- Disorder of breast unspecified) - (PT WITH FAMILY H/O BREAST CANCER P1+0 C/SSINCE 10YRS",
+      "significantSigns": "PALPABLE RTBREAST MASS",
+      "possibleLineOfTreatment": "",
+      "otherConditions": "",
+      "familyHistory": "",
+      "physicalFindings": ""
+    },
+    "diagnosis": {
+      "diagnosis": "(N64.9) - (Disorder of breast unspecified)",
+      "principalCode": "N64.9",
+      "secondCode": "",
+      "thirdCode": "",
+      "fourthCode": "",
+      "fifthCode": "",
+      "sixthCode": ""
+    },
+    "management": {
+      "chronic": false,
+      "congenital": false,
+      "rta": false,
+      "workRelated": false,
+      "vaccination": false,
+      "checkUp": false,
+      "psychiatric": false,
+      "infertility": false,
+      "pregnancy": false
+    },
+    "services1": [],
+    "services2": [
+      {
+        "code": "83600-00-20",
+        "nonStandardCode": "",
+        "type": "Consultant consult",
+        "totalQuantity": 1,
+        "cost": 100.0,
+        "approvedQuantity": 0,
+        "approvedCost": 0.0,
+        "status": "partial"
+      }
+    ],
+    "medications": [],
+    "caseManagementForm": {
+      "possibleLineOfManagement": "",
+      "estimatedLengthOfStay": "",
+      "expectedDateOfAdmission": "",
+      "providerComments": ""
+    },
+    "certification": {
+      "physician": "Dr Doaa Abdel Megid",
+      "signature": false,
+      "stamp": false,
+      "nameAndRelationship": "",
+      "o": false
+    },
+    "completedBy": {
+      "signature": "",
+      "date": ""
+    },
+    "insuranceApproval": {
+      "approved": false,
+      "notApproved": false,
+      "approvalNo": "",
+      "approvalValidity": "02/02/2025 - 14/02/2025",
+      "comments": "1 - @refer t o Riyadh scan 2025/790426",
+      "approvedDisapprovedBy": "",
+      "signature": "",
+      "date": ""
+    }
+  },
+  "document_type": "UCAF Medical Form",
+  "confidence_score": 0.95
+}

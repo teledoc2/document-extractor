@@ -1,0 +1,52 @@
+{
+  "services": [
+    {
+      "nonStandardCode": "83600-00-20",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "services",
+      "description": "",
+      "reqQty": 1.0
+    },
+    {
+      "nonStandardCode": "100",
+      "description": "",
+      "reqQty": 0.0,
+      "reqCost": 0.0
+    },
+    {
+      "nonStandardCode": "partial",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Date",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Quantity",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "TRUE",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Physician",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Signature",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Stamp",
+      "description": ""
+    },
+    {
+      "nonStandardCode": "Date",
+      "description": "Name (and relationship (if guardian)): Dr Doaa Abdel Megid O Signature (*):",
+      "status": "Approved"
+    }
+  ]
+}

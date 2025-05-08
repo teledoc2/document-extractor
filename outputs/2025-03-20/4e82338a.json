@@ -1,0 +1,85 @@
+{
+  "file_name": "temp_d412a7bc-362b-4cbf-9f79-44c88f55662e.md",
+  "topics": [
+    "medical_form"
+  ],
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "ocr_contents": {
+    "provider": {
+      "name": "Sample Provider",
+      "address": "123 Provider St"
+    },
+    "insured": {
+      "name": "Sample Insured",
+      "policyNumber": "12345"
+    },
+    "patient": {
+      "name": "Sample Patient",
+      "gender": "M",
+      "dateOfBirth": "1990-01-01"
+    },
+    "visit": {
+      "visitDate": "2024-01-01",
+      "visitType": "Consultation"
+    },
+    "diagnosis": {
+      "primaryDiagnosis": "Sample diagnosis"
+    },
+    "management": {
+      "plan": "Sample management plan"
+    },
+    "suggestedServices": [
+      {
+        "nonStandardCode": "Type",
+        "description": "",
+        "status": "Approved"
+      },
+      {
+        "nonStandardCode": "Cost",
+        "description": ""
+      },
+      {
+        "nonStandardCode": "Status",
+        "description": ""
+      },
+      {
+        "nonStandardCode": "services",
+        "description": "",
+        "requestedQuantity": 1.0,
+        "requestedCost": 100.0,
+        "grossAmount": 0.0,
+        "approvedQuantity": 0.0,
+        "status": "Partial"
+      },
+      {
+        "nonStandardCode": "Date",
+        "description": ""
+      },
+      {
+        "nonStandardCode": "Type",
+        "description": ""
+      },
+      {
+        "nonStandardCode": "TRUE",
+        "description": "Physician Signature Stamp",
+        "status": "Approved"
+      }
+    ],
+    "medications": [],
+    "caseManagementForm": {},
+    "certification": {
+      "physician": "Dr. Sample"
+    },
+    "completedBy": {
+      "name": "Sample User"
+    },
+    "insuranceApproval": {
+      "status": "Pending"
+    }
+  },
+  "document_type": "UCAF Medical Form",
+  "confidence_score": 0.95
+}

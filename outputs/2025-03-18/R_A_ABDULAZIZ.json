@@ -1,0 +1,148 @@
+{
+  "file_name": "temp_2d72da8b-c90e-4598-8a4b-83a1657666e1.md",
+  "topics": [
+    "medical_form"
+  ],
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "ocr_contents": {
+    "provider": {
+      "providerName": "Doha Medical Complex - Dhahran",
+      "insuranceCompanyName": "The Mediterranean and Gulf Cooperative Insurance and ALAYE Reinsurance Company (MedGulf)",
+      "tpaCompanyName": "",
+      "patientFileNumber": "",
+      "dept": "professional - 10.00 - Obstetrics Gynecology Specialty",
+      "single": false,
+      "married": false,
+      "planType": "EHCPOL",
+      "dateOfVisit": "26/02/2025",
+      "newVisit": false,
+      "followUp": false,
+      "refill": false,
+      "walkIn": false,
+      "approvalDateTime": "",
+      "approvalValidity": "",
+      "referral": true,
+      "referralPreAuthProvider": "DAMMAM SCAN CENTER - DAMMAM",
+      "pharmacy": ""
+    },
+    "insured": {
+      "insuredName": "RANA ABDULRAHMAN ABDULAZIZ",
+      "documentId": "1076720091",
+      "idCardNo": "5800492",
+      "nationalId": "",
+      "policyNo": "GRH/17091117",
+      "memberSince": "",
+      "memberType": "",
+      "expiryDate": "2025-07-01",
+      "policyHolder": "",
+      "entryDate": "",
+      "class_": "",
+      "approval": "2025/1605112",
+      "approvalReferrenceNumber": "",
+      "approvalStatus": "partial",
+      "approvalType": "",
+      "message": "",
+      "notes": "",
+      "adjudicationPayer": ""
+    },
+    "patient": {
+      "sex": "FEMALE",
+      "age": "0 - 7",
+      "gender": "FEMALE"
+    },
+    "visitDetails": {
+      "inpatient": false,
+      "outpatient": true,
+      "emergencyCase": false,
+      "emergencyCareLevel": "",
+      "physicianName": "",
+      "bp": "null / null",
+      "pulse": "",
+      "temperature": "",
+      "weight": "",
+      "height": "",
+      "rr": "",
+      "durationOfIllness": "",
+      "chiefComplaints": "(E03 - Other hypothyroidism) - (30y P1+1 complain pelvic pain irregular cycle every 35 to 40days hypothyrodism)",
+      "significantSigns": "",
+      "possibleLineOfTreatment": "",
+      "otherConditions": "",
+      "familyHistory": "",
+      "physicalFindings": ""
+    },
+    "diagnosis": {
+      "diagnosis": "(R10.2) - (Pelvic and perineal pain) (E03) - (Other hypothyroidism) (092.6) - (Galactorrhoea)",
+      "principalCode": "E03",
+      "secondCode": "R10.2",
+      "thirdCode": "O92.6",
+      "fourthCode": "",
+      "fifthCode": "",
+      "sixthCode": ""
+    },
+    "management": {
+      "chronic": false,
+      "congenital": false,
+      "rta": false,
+      "workRelated": false,
+      "vaccination": false,
+      "checkUp": false,
+      "psychiatric": false,
+      "infertility": false,
+      "pregnancy": false
+    },
+    "services": [
+      {
+        "code": "83600-00-10",
+        "nonStandardCode": "CON0002",
+        "description": "Specialist -1 consult",
+        "type": "services",
+        "totalQuantity": 1,
+        "cost": 24.6,
+        "approvedQuantity": 0,
+        "approvedCost": 0.0,
+        "status": "partial",
+        "note": ""
+      }
+    ],
+    "medications": [
+      {
+        "name": "",
+        "type": "",
+        "quantity": "",
+        "note": ""
+      }
+    ],
+    "caseManagementForm": {
+      "possibleLineOfManagement": "",
+      "estimatedLengthOfStay": "",
+      "expectedDateOfAdmission": "",
+      "providerComments": ""
+    },
+    "certification": {
+      "physician": "",
+      "signature": false,
+      "stamp": false,
+      "nameAndRelationship": "Eman Ahmed Nouredlin",
+      "o": false
+    },
+    "completedBy": {
+      "signature": "",
+      "date": ""
+    },
+    "insuranceApproval": {
+      "approved": false,
+      "notApproved": false,
+      "approvalNo": "",
+      "approvalValidity": "26/02/2025 - 28/03/2025",
+      "comments": "1 - Referred to Provider: 5845148 - DAMMAM SCAN CENTER - DAMMAM Referral Expiry Date: 28/03/2025",
+      "approvedDisapprovedBy": "",
+      "signature": "",
+      "date": ""
+    }
+  },
+  "document_type": "UCAF Medical Form",
+  "confidence_score": 0.95
+}

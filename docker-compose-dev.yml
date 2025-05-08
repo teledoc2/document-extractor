@@ -1,0 +1,41 @@
+# docker-compose.yml
+services:
+
+  backend:
+    image: teledoc2/document-extractor:0.1
+    container_name: document-extractor
+    ports:
+      - "8007:8007"
+    volumes:
+      - uploads:/app/uploads
+      - archives:/app/archives
+    networks: [internal]
+
+  frontend:
+    image: teledoc2/file-guru:0.3
+    container_name: file-guru
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_ENDPOINT=http://172.18.0.3:8007
+      - VITE_API_DOCUMENTS_PATH=/documents
+      - VITE_API_UPLOAD_PATH=/upload          
+    networks: [internal]
+
+  # nginx:
+  #   image: nginx:1.26-alpine  # may exclude nginx all together in dev environment.
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d:ro  
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   depends_on: [frontend, backend]
+  #   networks: [internal]
+
+volumes:
+  uploads:
+  archives:
+  # frontend_build:
+networks:
+  internal:

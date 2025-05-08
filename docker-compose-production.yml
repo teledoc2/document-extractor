@@ -1,0 +1,43 @@
+# docker-compose.yml
+services:
+
+  backend:
+    image: teledoc2/document-extractor:0.1
+    container_name: document-extractor
+    ports:
+      - "8007:8007"
+    volumes:
+      - uploads:/app/uploads
+      - archives:/app/archives
+    networks: [internal]
+
+  frontend:
+    image: teledoc2/file-guru:0.2
+    container_name: file-guru
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_ENDPOINT=http://backend:8007
+      - VITE_API_DOCUMENTS_PATH=/documents
+      - VITE_API_UPLOAD_PATH=/upload          
+    networks: [internal]
+
+  nginx:
+    image: nginx:1.26-alpine
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro  # TODO: create nginx/conf.d/default.conf in docker-compose.yml directory (/opt/document-uploader)
+      - ./certs:/etc/nginx/certs:ro  # TODO: create certs/fullchain.pem and certs/privkey.pem in docker-compose.yml directory (/opt/document-uploader)  
+      - frontend_build:/usr/share/nginx/html:ro  # TODO: build and use the frontend, here ther frontend is moved to the nginx container.  replace the last 3 lines in frontend defatult.conf with a copy of the third line from backend.
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on: [frontend, backend]
+    networks: [internal]
+
+volumes:
+  uploads:
+  archives:
+  frontend_build:
+networks:
+  internal:

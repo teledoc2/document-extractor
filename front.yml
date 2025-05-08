@@ -1,0 +1,26 @@
+# ---------- base ----------
+    FROM node:20-alpine
+
+    # 1. create work directory
+    WORKDIR /app
+    
+    # 2. copy lock-file(s) first to leverage build cache
+    COPY package*.json ./
+    # COPY bun.lockb .           # if you use bun
+    # COPY pnpm-lock.yaml .      # if you use pnpm
+    
+    # 3. install ALL dependencies (dev + prod — we’re in dev mode)
+    RUN npm install
+    
+    # 4. copy the rest of the source
+    COPY . .
+    
+    # 5. environment so Vite binds to all interfaces
+    ENV HOST=0.0.0.0
+    ENV PORT=8080
+    
+    # 6. expose port for docker compose / `-p`
+    EXPOSE 8080
+    
+    # 7. start the dev server; "--" lets us add extra flags
+    CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "8080"]

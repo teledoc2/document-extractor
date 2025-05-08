@@ -1,0 +1,29 @@
+# .dockerignore
+# ────────────
+# keep source code, requirements.txt, and Dockerfile; ignore everything else that bloats the build
+
+# VCS & editors
+.git
+.gitignore
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# local runtime artefacts
+__pycache__/
+*.py[cod]
+*.log
+
+# virtual envs
+.venv/
+.venv311/
+.env              # if you keep secrets here, don’t bake them into the image
+.env.*
+
+# large/ephemeral folders
+outputs/
+uploads/
+archives/
+temp_files/
+tests/

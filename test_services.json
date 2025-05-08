@@ -1,0 +1,19 @@
+{
+  "services": [
+    {
+      "code": "90911-00-00",
+      "description": "Duplex ultrasound of vessels of other sites -  Scrotum Doppler",
+      "additionalCodes": [
+        "14013"
+      ],
+      "type": "Imaging",
+      "reqQty": 1.0,
+      "reqCost": 345.0,
+      "grossAmount": 600.0,
+      "appQty": 1.0,
+      "appCost": 345.0,
+      "appGross": 345.0,
+      "status": "Not Required"
+    }
+  ]
+}

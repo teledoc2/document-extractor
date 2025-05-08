@@ -1,0 +1,297 @@
+{
+  "documentId": "5f604363-87ad-4781-af0a-08a277983177",
+  "documentName": "w_f_abbasia.pdf",
+  "summary": "Analysis of document \"w_f_abbasia.pdf\"",
+  "fileInfo": {
+    "original_name": "w_f_abbasia.pdf",
+    "patient_name": "w_f_abbasia",
+    "file_id": "c969e854-66ac-4247-a588-dd6a71447d67",
+    "date": "2025-05-01"
+  },
+  "data": {
+    "file_name": "w_f_abbasia.pdf",
+    "patient_name": "w_f_abbasia",
+    "page_count": 2,
+    "pages": [
+      {
+        "file_name": "temp_c969e854-66ac-4247-a588-dd6a71447d67_page_1.md",
+        "topics": [
+          "medical_form"
+        ],
+        "languages": [
+          "English",
+          "Arabic"
+        ],
+        "ocr_contents": {
+          "provider": {
+            "providerName": "ConsultantRadiologists(RiyadhScan)",
+            "insuranceCompanyName": "Tawuniya",
+            "tpaCompanyName": "",
+            "patientFileNumber": "",
+            "dept": "RadiologySpecialty",
+            "single": false,
+            "married": false,
+            "planType": "",
+            "dateOfVisit": "11/03/2025 11:31:00 PM",
+            "newVisit": false,
+            "followUp": true,
+            "refill": false,
+            "walkIn": false,
+            "referral": false,
+            "approvalDateTime": "11/03/2025 23:37:17",
+            "approvalValidity": "30 Days"
+          },
+          "insured": {
+            "insuredName": "wasif fiaz abbasim fiaz abbasia",
+            "idCardNo": "002398727863001",
+            "nationalId": "2398727863",
+            "policyNo": "36310219",
+            "memberSince": "",
+            "memberType": "",
+            "expiryDate": "30/04/2025 12:00:00 AM",
+            "policyHolder": "gas solutions",
+            "approval": "",
+            "approvalReferrenceNumber": "77806372",
+            "approvalStatus": "Not Required",
+            "approvalType": "Professional",
+            "message": "Please note that the amount of the requestedservices do not require prior approval from Tawuniya as per this \"Policys\" terms and conditions.Kindly provide the necessarymedical services to our clie",
+            "adjudicationPayer": "",
+            "payer": "Please note that the amount of the requestedservicesdo not require prior approvalfrom Tawuniya as per this \"Policys\" terms and conditions.Kindly provide the necessarymedical services to our clie"
+          },
+          "patient": {
+            "sex": "Male",
+            "age": "38 Year",
+            "gender": ""
+          },
+          "visitDetails": {
+            "inpatient": false,
+            "outpatient": true,
+            "emergencyCase": false,
+            "emergencyCareLevel": "",
+            "physicianName": "KHALED ALY",
+            "bp": "",
+            "pulse": "",
+            "temperature": "34.5",
+            "weight": "",
+            "height": "",
+            "rr": "",
+            "durationOfIllness": "",
+            "chiefComplaints": "Dear dr ... ptn left scrotal pain need approvalfor scrotal doppler ultrasoundboth side",
+            "significantSigns": "",
+            "possibleLineOfTreatment": "",
+            "otherConditions": ""
+          },
+          "diagnosis": {
+            "diagnosis": "",
+            "principalCode": "N50.8-Oth spec disrd of male genital",
+            "secondCode": "",
+            "thirdCode": "organs",
+            "fourthCode": "",
+            "fifthCode": "",
+            "sixthCode": ""
+          },
+          "management": {
+            "chronic": false,
+            "congenital": false,
+            "rta": false,
+            "workRelated": false,
+            "vaccination": false,
+            "checkUp": false,
+            "psychiatric": false,
+            "infertility": false,
+            "pregnancy": false
+          },
+          "services": [
+            {
+              "note": "Not Required"
+            }
+          ],
+          "completedBy": {
+            "providerApproval": "",
+            "completedCodedBy": "",
+            "signature": "",
+            "date": ""
+          },
+          "medications": [
+            {
+              "medicationName": "(Generic Nam e)",
+              "type": "",
+              "note": "No: Data To Be Shown"
+            }
+          ],
+          "caseManagementForm": {
+            "possibleLineOfManagement": "",
+            "expectedDateOfAdmission": "",
+            "estimatedCost": 345,
+            "estimatedGross": 600,
+            "totalApprovedCost": 345,
+            "estimatedLengthOfStay": "",
+            "approvedLengthOfStay": "",
+            "providerComments": ""
+          },
+          "certification": {
+            "physicianCertification": "",
+            "physicianSignature": false,
+            "physicianSignatureDate": "",
+            "patientCertification": "",
+            "patientSignature": false,
+            "patientSignatureDate": "",
+            "patientRelationship": ""
+          },
+          "insuranceApproval": {
+            "approved": false,
+            "notApproved": false,
+            "approvalNo": "77806372",
+            "approvalValidity": "30 Days",
+            "comments": "",
+            "approvedDisapprovedBy": "",
+            "signature": "",
+            "date": ""
+          },
+          "suggestedServices": [
+            {
+              "code": "90911-00-00",
+              "description": "duplex ultrasound of",
+              "additionalCodes": [],
+              "grossAmount": null,
+              "serviceType": "vessels of other sites - (14013) scrot",
+              "note": "1.0"
+            },
+            {
+              "code": "",
+              "description": "345.00",
+              "additionalCodes": [],
+              "grossAmount": 1,
+              "serviceType": "600.00",
+              "note": "345.0"
+            },
+            {
+              "code": "",
+              "description": "345.00",
+              "additionalCodes": [],
+              "grossAmount": null,
+              "serviceType": "not required",
+              "note": "services"
+            }
+          ]
+        },
+        "document_type": "UCAF Medical Form",
+        "confidence_score": 0.95
+      },
+      {
+        "file_name": "temp_c969e854-66ac-4247-a588-dd6a71447d67_page_2.md",
+        "topics": [
+          "medical_form"
+        ],
+        "languages": [
+          "English",
+          "Arabic"
+        ],
+        "ocr_contents": {
+          "provider": {
+            "providerName": "",
+            "insuranceCompanyName": "",
+            "tpaCompanyName": "",
+            "patientFileNumber": "",
+            "dept": "",
+            "planType": "",
+            "dateOfVisit": "",
+            "approvalDateTime": "",
+            "approvalValidity": ""
+          },
+          "insured": {
+            "insuredName": "",
+            "idCardNo": "",
+            "nationalId": "",
+            "policyNo": "",
+            "memberSince": "",
+            "memberType": "",
+            "expiryDate": "",
+            "policyHolder": "",
+            "class_": "",
+            "approval": "",
+            "approvalReferrenceNumber": "",
+            "approvalStatus": "",
+            "approvalType": "",
+            "message": "",
+            "adjudicationPayer": "",
+            "payer": ""
+          },
+          "patient": {
+            "sex": "",
+            "age": "",
+            "gender": ""
+          },
+          "visitDetails": {
+            "emergencyCareLevel": "",
+            "physicianName": "",
+            "bp": "",
+            "pulse": "",
+            "temperature": "",
+            "weight": "",
+            "height": "",
+            "rr": "",
+            "durationOfIllness": "",
+            "chiefComplaints": "",
+            "significantSigns": "",
+            "possibleLineOfTreatment": "",
+            "otherConditions": ""
+          },
+          "diagnosis": {
+            "diagnosis": "",
+            "principalCode": "",
+            "secondCode": "",
+            "thirdCode": "",
+            "fourthCode": "",
+            "fifthCode": "",
+            "sixthCode": ""
+          },
+          "management": {},
+          "services": [
+            {
+              "note": ""
+            }
+          ],
+          "completedBy": {
+            "providerApproval": "",
+            "completedCodedBy": "",
+            "signature": "",
+            "date": ""
+          },
+          "medications": [
+            {
+              "medicationName": "",
+              "type": "",
+              "note": ""
+            }
+          ],
+          "caseManagementForm": {
+            "possibleLineOfManagement": "",
+            "expectedDateOfAdmission": "",
+            "estimatedLengthOfStay": "",
+            "approvedLengthOfStay": "",
+            "providerComments": ""
+          },
+          "certification": {
+            "physicianCertification": "",
+            "physicianSignatureDate": "",
+            "patientCertification": "",
+            "patientSignatureDate": "",
+            "patientRelationship": ""
+          },
+          "insuranceApproval": {
+            "approvalNo": "",
+            "approvalValidity": "",
+            "comments": "",
+            "approvedDisapprovedBy": "[Approved/DisapprovedBy]",
+            "signature": "[Signature]",
+            "date": "[Date://]"
+          }
+        },
+        "document_type": "UCAF Medical Form",
+        "confidence_score": 0.95
+      }
+    ]
+  },
+  "generatedAt": "2025-05-01T13:16:34.353Z"
+}

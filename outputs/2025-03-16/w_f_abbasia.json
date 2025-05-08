@@ -1,0 +1,150 @@
+{
+  "file_name": "temp_b3b1a7a1-72d0-43ad-98f3-70ef25be2dd3.md",
+  "topics": [
+    "medical_form"
+  ],
+  "languages": [
+    "English",
+    "Arabic"
+  ],
+  "ocr_contents": {
+    "provider": {
+      "providerName": "ConsultantRadiologists(RiyadhScan)",
+      "insuranceCompanyName": "Tawuniya",
+      "tpaCompanyName": "",
+      "patientFileNumber": "",
+      "dept": "RadiologySpecialty",
+      "single": false,
+      "married": false,
+      "planType": "",
+      "dateOfVisit": "11/03/2025 11:31:00 PM",
+      "newVisit": false,
+      "followUp": true,
+      "refill": false,
+      "walkIn": false,
+      "approvalDateTime": "11/03/2025 23:37:17",
+      "approvalValidity": "30 Days",
+      "referral": false,
+      "referralPreAuthProvider": "",
+      "pharmacy": ""
+    },
+    "insured": {
+      "insuredName": "wasif fiaz abbasi m fiaz abbasia",
+      "documentId": "",
+      "idCardNo": "002398727863001",
+      "nationalId": "2398727863",
+      "policyNo": "36310219",
+      "memberSince": "",
+      "memberType": "",
+      "expiryDate": "30/04/2025 12:00:00 AM",
+      "policyHolder": "gas solutions",
+      "entryDate": "",
+      "class_": "a",
+      "approval": "",
+      "approvalReferrenceNumber": "77806372",
+      "approvalStatus": "Not Required",
+      "approvalType": "Professional",
+      "message": "Please note that the amount of the requested services do not require prior approval from Tawuniya as per this Policys terms and conditions Kindly provide the necessarymedical servicesto our clie",
+      "notes": "",
+      "adjudicationPayer": ""
+    },
+    "patient": {
+      "sex": "Male",
+      "age": "38 Year",
+      "gender": ""
+    },
+    "visitDetails": {
+      "inpatient": false,
+      "outpatient": true,
+      "emergencyCase": false,
+      "emergencyCareLevel": "",
+      "physicianName": "KHALED ALY",
+      "bp": "-",
+      "pulse": "",
+      "temperature": "34.5",
+      "weight": "",
+      "height": "",
+      "rr": "",
+      "durationOfIllness": "",
+      "chiefComplaints": "Dear dr ... ptnleft scrotal pain need approvalfor scrotal doppler ultrasoundboth side",
+      "significantSigns": "",
+      "possibleLineOfTreatment": "",
+      "otherConditions": "",
+      "familyHistory": "",
+      "physicalFindings": ""
+    },
+    "diagnosis": {
+      "diagnosis": "",
+      "principalCode": "N50.8-Oth spec disrd of male genital",
+      "secondCode": "",
+      "thirdCode": "",
+      "fourthCode": "",
+      "fifthCode": "",
+      "sixthCode": ""
+    },
+    "management": {
+      "chronic": false,
+      "congenital": false,
+      "rta": false,
+      "workRelated": false,
+      "vaccination": false,
+      "checkUp": false,
+      "psychiatric": false,
+      "infertility": false,
+      "pregnancy": false
+    },
+    "services": [
+      {
+        "code": "90911-00-00",
+        "nonStandardCode": "",
+        "description": "Duplex ultrasound of vessels of other sites - Scrot Imaging services",
+        "type": "Imaging",
+        "cost": 345.0,
+        "approvedCost": 345.0,
+        "status": "Not Required",
+        "note": ""
+      }
+    ],
+    "medications": [
+      {
+        "name": "",
+        "type": "",
+        "quantity": "",
+        "note": "No: Data To Be Shown"
+      }
+    ],
+    "caseManagementForm": {
+      "caseManagementFormIncluded": false,
+      "possibleLineOfManagement": "",
+      "estimatedLengthOfStay": "",
+      "expectedDateOfAdmission": "",
+      "estimatedCost": 345.0,
+      "estimatedGross": 600.0,
+      "totalApprovedCost": 345.0,
+      "providerComments": ""
+    },
+    "certification": {
+      "physician": "",
+      "signature": false,
+      "stamp": false,
+      "nameAndRelationship": "",
+      "o": false
+    },
+    "completedBy": {
+      "signature": "",
+      "date": ""
+    },
+    "insuranceApproval": {
+      "approved": false,
+      "notApproved": false,
+      "approvalNo": "77806372",
+      "approvalValidity": "30 Days",
+      "comments": "",
+      "approvedDisapprovedBy": "",
+      "signature": "",
+      "date": ""
+    }
+  },
+  "document_type": "UCAF Medical Form",
+  "confidence_score": 0.95
+}
