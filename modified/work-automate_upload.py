@@ -332,7 +332,7 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
         if page.is_closed():
             logger.error("Page is closed, cannot proceed with fallback.")
             return ""
-        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, extract_key_words(value or ""))
+        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, extract_key_words(value))
 
 def find_element_with_fallback(page, primary_xpath: str, fallback_selector: str, label_text: str = None, timeout: int = 10000) -> bool:
     try:
@@ -504,48 +504,316 @@ def input_icd10_codes(page, input_xpath: str, codes: list, timeout: int = 10000)
         return False
 
 def select_or_type_modality(page, dropdown_arrow_xpath: str, dropdown_input_xpath: str, list_id: str, value: str, timeout: int = 20000) -> str:
-    """Quick-type approach to guarantee modality comes from dropdown.
-
-    1. Focus the input.
-    2. Type the provided *value* (e.g., "CT-RUH").
-    3. Press Enter then Tab so that Kendo picks the first matching list option.
-    """
     try:
         if not value:
-            logger.warning("No Modality value supplied")
+            logger.warning(f"No Modality value provided for dropdown at {dropdown_arrow_xpath}")
             return ""
+        
+        cleaned_value = extract_key_words(value)
+        logger.info(f"Extracted key words from '{value}': '{cleaned_value}'")
 
-        # Ensure we are focused on the input; arrow fallback not needed when typing directly.
+        cleaned_value = cleaned_value.replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+        cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Cleaned value after removing special characters: '{cleaned_value}'")
+
+        input_words = cleaned_value.split()
+        logger.info(f"Input split into words: {input_words}")
+
+        if find_element_with_fallback(page, dropdown_arrow_xpath, f'//span[contains(@class, "k-select")]'):
+            page.click(f'xpath={dropdown_arrow_xpath}')
+            page.wait_for_timeout(1000)
+        else:
+            logger.error(f"Arrow button not found at {dropdown_arrow_xpath}")
+            return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, value)
+
+        list_xpath = f"//ul[@id='{list_id}']"
+        page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+        available_options = log_available_options(page, list_xpath)
+        
+        cleaned_options = {}
+        for option in available_options:
+            modality_name = option.split("-")[0].strip()
+            cleaned_name = modality_name.replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+            cleaned_name = " ".join(cleaned_name.split())
+            cleaned_options[cleaned_name] = option
+        logger.info(f"Cleaned options: {list(cleaned_options.keys())}")
+
+        option_scores = {}
+        for cleaned_opt, full_opt in cleaned_options.items():
+            opt_words = cleaned_opt.split()
+            matches = 0
+            for input_word in input_words:
+                for opt_word in opt_words:
+                    score = fuzz.ratio(input_word.lower(), opt_word.lower())
+                    if score >= 90:
+                        matches += 1
+                        break
+            option_scores[full_opt] = matches
+        
+        if option_scores:
+            best_match = max(option_scores.items(), key=lambda x: x[1])[0]
+            match_count = option_scores[best_match]
+            logger.info(f"Best match: '{best_match}' with {match_count} word matches")
+            
+            if match_count > 0:
+                option_xpath = f"{list_xpath}/li[text()='{best_match}']"
+                try:
+                    option_element = page.wait_for_selector(f'xpath={option_xpath}', state='visible', timeout=timeout)
+                    option_element.scroll_into_view_if_needed()
+                    page.wait_for_timeout(1000)
+                    page.click(f'xpath={option_xpath}')
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Selected matching modality from list: '{best_match}' with {match_count} word matches")
+                    return best_match
+                except:
+                    logger.warning(f"Could not select '{best_match}' from list, falling back to typing")
+                    page.click(f'xpath={dropdown_input_xpath}')
+                    page.wait_for_timeout(500)
+                    page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                    page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                    page.fill(f'xpath={dropdown_input_xpath}', best_match)
+                    page.wait_for_timeout(1000)
+                    page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Typed and entered modality: '{best_match}'")
+                    return best_match
+        
+        logger.warning(f"No options with strong word matches found for '{cleaned_value}'")
         return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, value)
 
     except Exception as e:
-        logger.error(f"Failed quick-type modality: {e}", exc_info=True)
-        return ""
+        logger.error(f"Failed to process modality......................................................................................: {str(e)}", exc_info=True)
+        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, value)
 
 def select_or_type_service_desc(page, dropdown_arrow_xpath: str, dropdown_input_xpath: str, list_id: str, value: str, timeout: int = 20000) -> str:
-    """Ultra-simple approach requested by the user:
-
-    1. Focus the input.
-    2. Type a suitable text (e.g. "CT Abdomen").  If the incoming *value* contains a hyphen code
-       like "11011 - CT Abdomen", we trim everything before the hyphen so we type only the
-       descriptive part ("CT Abdomen").
-    3. Press Enter then Tab – Kendo will automatically select the first matching entry in its
-       list, which satisfies the form's validation rules.
-    """
-
     try:
-        # Derive text to type: use part after the hyphen if present, otherwise the cleaned value.
-        text_to_type = value or ""
-        if "-" in text_to_type:
-            text_to_type = text_to_type.split("-", 1)[-1].strip()
-        text_to_type = extract_key_words(text_to_type)  # keep words like "CT Abdomen" clean
+        if not value:
+            logger.warning(f"No service description value provided for dropdown at {dropdown_arrow_xpath}")
+            return ""
+        
+        cleaned_value = extract_key_words(value)
+        logger.info(f"Extracted key words from '{value}': '{cleaned_value}'")
 
-        # Use the helper that already handles Control+A, Enter and Tab.
-        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, text_to_type)
+        cleaned_value = cleaned_value.replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+        noise_phrases = ['refer to other hospital', 'for', 'with', 'and']
+        for phrase in noise_phrases:
+            cleaned_value = re.sub(rf'\b{phrase}\b', ' ', cleaned_value, flags=re.IGNORECASE)
+        cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Cleaned value after removing special characters and noise: '{cleaned_value}'")
+
+        if "-" in value:
+            parts = value.split("-")
+            last_part = parts[-1].strip()
+            paren_match = re.search(r'\((.*?)\)\s*(.*)', last_part)
+            if paren_match:
+                code, text_after = paren_match.groups()
+                if text_after.strip():
+                    cleaned_value = text_after.strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                    cleaned_value = " ".join(cleaned_value.split())
+                elif code.strip().replace(".", "").isalnum():
+                    cleaned_value = last_part.split("(")[0].strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                    cleaned_value = " ".join(cleaned_value.split())
+            else:
+                cleaned_value = parts[-1].strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Final cleaned value for service description: '{cleaned_value}'")
+
+        # ------------------------------------------------------------------
+        # Determine if we have a modality keyword mapping (CT/MR/US). If so we
+        # can skip the complex chunk logic and just open the list and pick.
+        # ------------------------------------------------------------------
+        lower_val_full = value.lower() if value else ""
+        mapping = {
+            "CT": ["computerised", "computerized", "computed tomography", "computed"],
+            "MR": ["magnetic resonance"],
+            "US": ["ultrasound"],
+        }
+        target_acronym = None
+        for acr, terms in mapping.items():
+            if any(t in lower_val_full for t in terms):
+                target_acronym = acr
+                break
+
+        if target_acronym:
+            # Open dropdown list via arrow button
+            if dropdown_arrow_xpath and find_element_with_fallback(page, dropdown_arrow_xpath, f'//span[contains(@class, "k-select")]'):
+                page.click(f'xpath={dropdown_arrow_xpath}')
+            else:
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
+            page.wait_for_timeout(600)
+
+            list_xpath = f"//ul[@id='{list_id}']"
+            page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+            available_options = log_available_options(page, list_xpath)
+            match_opt = next((opt for opt in available_options if target_acronym.lower() in opt.lower()), None)
+            if match_opt:
+                idx = available_options.index(match_opt)
+                for _ in range(idx):
+                    page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(800)
+                logger.info(f"Service_desc fast-path selected '{match_opt}' for acronym '{target_acronym}'")
+                return match_opt
+            else:
+                logger.warning(f"No option contained '{target_acronym}', falling back.")
+
+        # ----- Existing chunk/fuzzy logic continues if no fast-path matched -----
+
+        key_words = cleaned_value.split()
+        max_chunk_size = 3
+        all_chunks = []
+        for size in range(1, max_chunk_size + 1):
+            for i in range(len(key_words) - size + 1):
+                chunk = " ".join(key_words[i:i + size])
+                all_chunks.append(chunk)
+        
+        chunks_by_length = {size: [] for size in range(1, max_chunk_size + 1)}
+        for chunk in all_chunks:
+            length = len(chunk.split())
+            chunks_by_length[length].append(chunk)
+        
+        ordered_chunks = []
+        for size in [2, 3, 1]:
+            ordered_chunks.extend(chunks_by_length.get(size, []))
+        logger.info(f"Text chunks for service description: {ordered_chunks}")
+
+        list_xpath = f"//ul[@id='{list_id}']"
+        for chunk in ordered_chunks:
+            logger.info(f"Typing chunk: '{chunk}'")
+            if find_element_with_fallback(page, dropdown_input_xpath, '//input[@name="ServiceNameId_input"]'):
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.wait_for_timeout(1000)
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.fill(f'xpath={dropdown_input_xpath}', chunk)
+                page.wait_for_timeout(2000)
+            else:
+                logger.error(f"Service description input field not found at {dropdown_input_xpath}")
+                return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, cleaned_value)
+
+            try:
+                page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                break
+            except PlaywrightTimeoutError:
+                logger.warning(f"Dropdown {list_xpath} not visible after {timeout}ms with chunk '{chunk}'")
+                if chunk == ordered_chunks[-1]:
+                    logger.warning(f"No chunks loaded the dropdown list. Falling back to typing '{cleaned_value}'")
+                    return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, cleaned_value)
+                continue
+
+        available_options = log_available_options(page, list_xpath)
+        if not available_options:
+            logger.warning(f"No options loaded for service description at {list_xpath}")
+            return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, cleaned_value)
+
+        # Keyword-based modality mapping: CT / MR / US
+        lower_val = value.lower() if value else ""
+        acronym_map = {
+            "CT": ["computerised", "computerized", "computed tomography", "computed"],
+            "MR": ["magnetic resonance"],
+            "US": ["ultrasound"],
+        }
+
+        target_acronym = None
+        for acr, terms in acronym_map.items():
+            if any(term in lower_val for term in terms):
+                target_acronym = acr
+                break
+
+        if target_acronym:
+            logger.info(f"Keyword mapping triggered – selecting first option containing '{target_acronym}'.")
+            matched_opt = next((opt for opt in available_options if target_acronym.lower() in opt.lower()), None)
+            if matched_opt:
+                idx = available_options.index(matched_opt)
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.wait_for_timeout(300)
+                for _ in range(idx + 1):
+                    page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
+                    page.wait_for_timeout(150)
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(1000)
+                logger.info(f"Selected service description via keyword mapping: '{matched_opt}'")
+                return matched_opt
+            else:
+                logger.warning(f"No dropdown option contained acronym '{target_acronym}'. Proceeding with fuzzy matching.")
+        
+        cleaned_options = []
+        for option in available_options:
+            modality_name = option.split("-", 1)[-1].strip() if "-" in option else option
+            cleaned_name = modality_name.replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+            cleaned_name = " ".join(cleaned_name.split())
+            cleaned_options.append(cleaned_name)
+        logger.info(f"Cleaned options for fuzzy matching: {cleaned_options}")
+
+        best_match_cleaned = None
+        best_score = 0
+        best_chunk = None
+        for chunk in ordered_chunks:
+            match, score = process.extractOne(chunk, cleaned_options, scorer=fuzz.token_sort_ratio)
+            if score > best_score:
+                best_match_cleaned = match
+                best_score = score
+                best_chunk = chunk
+        logger.info(f"Best fuzzy match for chunks '{ordered_chunks}': '{best_match_cleaned}' with score {best_score} (from chunk '{best_chunk}')")
+
+        original_match, original_score = process.extractOne(cleaned_value, cleaned_options, scorer=fuzz.token_sort_ratio)
+        logger.info(f"Double-check with original '{cleaned_value}': '{original_match}' with score {original_score}")
+
+        if best_score >= 60 or original_score >= 60:
+            if original_score >= 50 and (original_score > best_score or best_score < 60):
+                best_match_index = cleaned_options.index(original_match)
+                best_match = available_options[best_match_index]
+                logger.info(f"Overriding chunk match with original match '{original_match}' (score {original_score} > {best_score})")
+            else:
+                best_match_index = cleaned_options.index(best_match_cleaned)
+                best_match = available_options[best_match_index]
+
+            type_value = best_match.split("-", 1)[-1].strip() if "-" in best_match else best_match
+            logger.info(f"Typing cleaned best match: '{type_value}'")
+
+            page.click(f'xpath={dropdown_input_xpath}')
+            page.wait_for_timeout(1000)
+            page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+            page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+            page.fill(f'xpath={dropdown_input_xpath}', type_value)
+            page.wait_for_timeout(2000)
+
+            available_options = log_available_options(page, list_xpath)
+            logger.info(f"Options after typing '{type_value}': {available_options}")
+
+            if best_match in available_options:
+                target_index = available_options.index(best_match)
+                logger.info(f"Target option '{best_match}' found at index {target_index}")
+
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.wait_for_timeout(500)
+
+                for _ in range(target_index + 1):
+                    page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
+                    page.wait_for_timeout(500)
+
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(2000)
+                logger.info(f"Selected service description: '{best_match}' using keyboard navigation")
+                return best_match
+            else:
+                logger.warning(f"'{best_match}' not found in available options after typing '{type_value}': {available_options}")
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.fill(f'xpath={dropdown_input_xpath}', type_value)
+                page.wait_for_timeout(1000)
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(2000)
+                logger.info(f"Selected service description: '{type_value}' using fallback type and enter")
+                return type_value
+        else:
+            logger.warning(f"No service description match above threshold 60 for '{ordered_chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+            return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, cleaned_value)
 
     except Exception as e:
-        logger.error(f"Failed service description quick-type: {e}", exc_info=True)
-        return ""
+        logger.error(f"Failed to process service description at {dropdown_arrow_xpath}: {str(e)}", exc_info=True)
+        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, cleaned_value if 'cleaned_value' in locals() else value)
 
 def get_latest_files(upload_dir: Path) -> tuple[str | None, str | None]:
     """Return paths of the latest JSON and PDF present in *upload_dir*.
@@ -1087,14 +1355,8 @@ def main():
         if not service_text:
             logger.warning("No valid 'description' or 'note' pair found in suggestedServices[0]")
             service_text = ""
-
-        # ------------------------------------------------------------------
-        # Temporary override (testing): always use fixed values that are guaranteed to exist in
-        # the dropdowns so the form can be saved successfully.  The procedure (service_desc)
-        #  "CT Abdomen" requires the modality "CT-RUH" to match.
-        # ------------------------------------------------------------------
-        modality_value = "CT-RUH"
-        service_desc    = "CT Abdomen"
+        modality_value = service_text
+        service_desc = service_text
 
         provider_name_raw = find_field(flat_json, "providerName") or ""
         if provider_name_raw:

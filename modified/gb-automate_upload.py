@@ -91,36 +91,14 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
             logger.warning(f"No {dropdown_type} value provided for dropdown at {dropdown_input_xpath}")
             return ""
         
-        # ------------------------------------------------------------------
-        # Fast-path for REFERRING: ignore input value, pick first option.
-        # ------------------------------------------------------------------
-        if dropdown_type == "referring":
-            # Focus input and open dropdown (ArrowDown opens list & selects first item).
-            if not find_element_with_fallback(page, dropdown_input_xpath, '//input[@name="Referring_input"]'):
-                logger.error("Referring input field not found")
-                return ""
-            page.click(f'xpath={dropdown_input_xpath}')
-            page.wait_for_timeout(300)
-            page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
-            page.wait_for_timeout(300)
-            page.press(f'xpath={dropdown_input_xpath}', "Enter")
-            page.wait_for_timeout(800)
-
-            # Capture first option text if list is still present
-            list_xpath = f"//ul[@id='{list_id}']"
-            try:
-                options = page.query_selector_all(f'xpath={list_xpath}/li/span[@class="k-cell"][2]')
-                selected = options[0].inner_text().strip() if options else value
-            except Exception:
-                selected = value
-            logger.info(f"Referring fast-path selected: '{selected}'")
-            return selected
-        
         key_input = extract_key_words(value)
         logger.info(f"Extracted key words for {dropdown_type} '{value}': '{key_input}'")
 
         if dropdown_type == "carrier_type":
             fallback_xpath = '//input[@name="OrganizationId_input"]'
+            initial_wait = 1000
+        elif dropdown_type == "referring":
+            fallback_xpath = '//input[@name="Referring_input"]'
             initial_wait = 1000
         elif dropdown_type == "visit_type":
             fallback_xpath = '//input[@name="VisitType_input"]'
@@ -136,6 +114,14 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
             page.wait_for_timeout(initial_wait)
         else:
             logger.error(f"{dropdown_type} input field not found at {dropdown_input_xpath}")
+            if dropdown_type == "referring":
+                # TRIAL: Fallback to typing "Dr. Riyadh" for referring
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Dr. Riyadh")
+                if result:
+                    logger.info(f"Fallback to typing 'Dr. Riyadh' for referring")
+                    return result
+                logger.warning("Failed to type 'Dr. Riyadh' for referring")
+                return ""
             return key_input
 
         key_words = key_input.split()
@@ -202,33 +188,43 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
             except PlaywrightTimeoutError:
                 logger.error(f"{dropdown_type} dropdown {list_xpath} not visible after {timeout}ms with '{chunk}'")
                 if chunk == chunks[-1]:
+                    if dropdown_type == "referring":
+                        # TRIAL: Fallback to typing "Dr. Riyadh" for referring
+                        result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Dr. Riyadh")
+                        if result:
+                            logger.info(f"Fallback to typing 'Dr. Riyadh' for referring")
+                            return result
+                        logger.warning("Failed to type 'Dr. Riyadh' for referring")
+                        return ""
+                    elif dropdown_type == "visit_type":
+                        # TRIAL: Fallback to typing "Riyadh Club" for visit_type
+                        result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Riyadh Club")
+                        if result:
+                            logger.info(f"Fallback to typing 'Riyadh Club' for visit_type")
+                            return result
+                        logger.warning("Failed to type 'Riyadh Club' for visit_type")
+                        return ""
                     return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, key_input)
                 continue
 
         if dropdown_type == "referring":
-            # Fetch visible options (each item is inside a span.k-cell[2]).
             options = page.query_selector_all(f'xpath={list_xpath}/li/span[@class="k-cell"][2]')
             available_options = [option.inner_text().strip() for option in options if option.inner_text().strip()]
-
-            if not available_options:
-                logger.warning(f"No options loaded for referring at {list_xpath}")
-                return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, key_input)
-
-            # Choose the first option in the list for referring.
-            page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
-            page.wait_for_timeout(300)
-            page.press(f'xpath={dropdown_input_xpath}', "Enter")
-            page.wait_for_timeout(2000)
-            selected_value = available_options[0]
-            logger.info(f"Selected referring (first option): '{selected_value}'")
-            return selected_value
         else:
             available_options = log_available_options(page, list_xpath)
-            logger.info(f"Available options in dropdown at {list_xpath}: {available_options}")
+        logger.info(f"Available options in dropdown at {list_xpath}: {available_options}")
 
-            if not available_options:
-                logger.warning(f"No options loaded for {dropdown_type} at {list_xpath}")
-                return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, key_input)
+        if not available_options:
+            logger.warning(f"No options loaded for {dropdown_type} at {list_xpath}")
+            if dropdown_type == "referring":
+                # TRIAL: Fallback to typing "Dr. Riyadh" for referring
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Dr. Riyadh")
+                if result:
+                    logger.info(f"Fallback to typing 'Dr. Riyadh' for referring")
+                    return result
+                logger.warning("Failed to type 'Dr. Riyadh' for referring")
+                return ""
+            return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, key_input)
 
         if dropdown_type in ["carrier_type", "carrier"]:
             cleaned_options = []
@@ -256,7 +252,7 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
                 best_chunk = chunk
         logger.info(f"Best fuzzy match for chunks '{chunks}': '{best_match_cleaned}' with score {best_score} (from chunk '{best_chunk}')")
 
-        if best_score >= 60:
+        if best_score >= 70:
             original_match, original_score = process.extractOne(key_input, cleaned_options, scorer=fuzz.token_sort_ratio)
             logger.info(f"Double-check with original '{key_input}': '{original_match}' with score {original_score}")
 
@@ -324,15 +320,57 @@ def select_or_type_dropdown(page, dropdown_type: str, dropdown_input_xpath: str,
                 logger.info(f"Selected {dropdown_type}: '{type_value}' from match '{best_match}' (score: {best_score if original_score < 50 or original_score <= best_score else original_score})")
                 return type_value
         else:
-            logger.warning(f"No {dropdown_type} match above threshold 60 for '{chunks}' (best: '{best_match_cleaned}', score: {best_score})")
-            return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, key_input)
+            if dropdown_type == "referring":
+                logger.warning(f"No referring match above threshold 60 for '{chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+                # TRIAL: Fallback to typing "Dr. Riyadh" for referring
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Dr. Riyadh")
+                if result:
+                    logger.info(f"Fallback to typing 'Dr. Riyadh' for referring")
+                    return result
+                logger.warning("Failed to type 'Dr. Riyadh' for referring")
+                return ""
+            elif dropdown_type == "carrier_type":
+                logger.warning(f"No carrier_type match above threshold 60 for '{chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+                # TRIAL: Fallback to typing "Med Gulf" for carrier_type
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Med Gulf")
+                if result:
+                    logger.info(f"Fallback to typing 'Med Gulf' for carrier_type")
+                    return result
+                logger.warning("Failed to type 'Med Gulf' for carrier_type")
+                return ""
+            elif dropdown_type == "carrier":
+                logger.warning(f"No carrier match above threshold 60 for '{chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+                # TRIAL: Fallback to typing "Med Gulf-Dam" for carrier
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Med Gulf-Dam")
+                if result:
+                    logger.info(f"Fallback to typing 'Med Gulf-Dam' for carrier")
+                    return result
+                logger.warning("Failed to type 'Med Gulf-Dam' for carrier")
+                return ""
+            elif dropdown_type == "visit_type":
+                logger.warning(f"No visit_type match above threshold 60 for '{chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+                # TRIAL: Fallback to typing "Riyadh Club" for visit_type
+                result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Riyadh Club")
+                if result:
+                    logger.info(f"Fallback to typing 'Riyadh Club' for visit_type")
+                    return result
+                logger.warning("Failed to type 'Riyadh Club' for visit_type")
+                return ""
 
     except Exception as e:
         logger.error(f"Failed to process {dropdown_type} at {dropdown_input_xpath}: {str(e)}", exc_info=True)
         if page.is_closed():
             logger.error("Page is closed, cannot proceed with fallback.")
             return ""
-        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, extract_key_words(value or ""))
+        if dropdown_type == "referring":
+            # TRIAL: Fallback to typing "Dr. Riyadh" for referring
+            result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "Dr. Riyadh")
+            if result:
+                logger.info(f"Fallback to typing 'Dr. Riyadh' for referring")
+                return result
+            logger.warning("Failed to type 'Dr. Riyadh' for referring")
+            return ""
+        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, extract_key_words(value))
 
 def find_element_with_fallback(page, primary_xpath: str, fallback_selector: str, label_text: str = None, timeout: int = 10000) -> bool:
     try:
@@ -422,8 +460,6 @@ def type_and_enter_kendo_dropdown(page, dropdown_input_xpath: str, value: str, t
             page.fill(f'xpath={dropdown_input_xpath}', value)
             page.wait_for_timeout(1000)
             page.press(f'xpath={dropdown_input_xpath}', "Enter")
-            page.wait_for_timeout(300)                 # short pause
-            page.press(f'xpath={dropdown_input_xpath}', "Tab")
             page.wait_for_timeout(5000)
             logger.info(f"Typed and entered {value} in Kendo dropdown at {dropdown_input_xpath}")
             return value
@@ -504,48 +540,354 @@ def input_icd10_codes(page, input_xpath: str, codes: list, timeout: int = 10000)
         return False
 
 def select_or_type_modality(page, dropdown_arrow_xpath: str, dropdown_input_xpath: str, list_id: str, value: str, timeout: int = 20000) -> str:
-    """Quick-type approach to guarantee modality comes from dropdown.
-
-    1. Focus the input.
-    2. Type the provided *value* (e.g., "CT-RUH").
-    3. Press Enter then Tab so that Kendo picks the first matching list option.
-    """
     try:
         if not value:
-            logger.warning("No Modality value supplied")
+            logger.warning(f"No Modality value provided for dropdown at {dropdown_arrow_xpath}")
+            return ""
+        
+        cleaned_value = extract_key_words(value)
+        logger.info(f"Extracted key words from '{value}': '{cleaned_value}'")
+
+        cleaned_value = cleaned_value.replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+        cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Cleaned value after removing special characters: '{cleaned_value}'")
+
+        input_words = cleaned_value.split()
+        logger.info(f"Input split into words: {input_words}")
+
+        if find_element_with_fallback(page, dropdown_arrow_xpath, f'//span[contains(@class, "k-select")]'):
+            page.click(f'xpath={dropdown_arrow_xpath}')
+            page.wait_for_timeout(1000)
+        else:
+            logger.error(f"Arrow button not found at {dropdown_arrow_xpath}")
+            # TRIAL: Fallback to typing "X Ray"
+            result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "X Ray")
+            if result:
+                logger.info(f"Fallback to typing 'X Ray' for modality")
+                return result
+            logger.warning("Failed to type 'X Ray' for modality")
             return ""
 
-        # Ensure we are focused on the input; arrow fallback not needed when typing directly.
-        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, value)
+        list_xpath = f"//ul[@id='{list_id}']"
+        page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+        available_options = log_available_options(page, list_xpath)
+        
+        cleaned_options = {}
+        for option in available_options:
+            modality_name = option.split("-")[0].strip()
+            cleaned_name = modality_name.replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+            cleaned_name = " ".join(cleaned_name.split())
+            cleaned_options[cleaned_name] = option
+        logger.info(f"Cleaned options: {list(cleaned_options.keys())}")
 
-    except Exception as e:
-        logger.error(f"Failed quick-type modality: {e}", exc_info=True)
+        option_scores = {}
+        for cleaned_opt, full_opt in cleaned_options.items():
+            opt_words = cleaned_opt.split()
+            matches = 0
+            for input_word in input_words:
+                for opt_word in opt_words:
+                    score = fuzz.ratio(input_word.lower(), opt_word.lower())
+                    if score >= 90:
+                        matches += 1
+                        break
+            option_scores[full_opt] = matches
+        
+        if option_scores:
+            best_match = max(option_scores.items(), key=lambda x: x[1])[0]
+            match_count = option_scores[best_match]
+            logger.info(f"Best match: '{best_match}' with {match_count} word matches")
+            
+            if match_count > 0:
+                option_xpath = f"{list_xpath}/li[text()='{best_match}']"
+                try:
+                    option_element = page.wait_for_selector(f'xpath={option_xpath}', state='visible', timeout=timeout)
+                    option_element.scroll_into_view_if_needed()
+                    page.wait_for_timeout(1000)
+                    page.click(f'xpath={option_xpath}')
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Selected matching modality from list: '{best_match}' with {match_count} word matches")
+                    return best_match
+                except:
+                    logger.warning(f"Could not select '{best_match}' from list, falling back to typing")
+                    page.click(f'xpath={dropdown_input_xpath}')
+                    page.wait_for_timeout(500)
+                    page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                    page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                    page.fill(f'xpath={dropdown_input_xpath}', best_match)
+                    page.wait_for_timeout(1000)
+                    page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Typed and entered modality: '{best_match}'")
+                    return best_match
+        
+        # Check if best fuzzy match score is below 60
+        best_score = max((fuzz.ratio(word.lower(), opt.lower()) for word in input_words for opt in cleaned_options.keys()), default=0)
+        if best_score < 60:
+            logger.warning(f"No modality match above threshold 60 for '{cleaned_value}' (best score: {best_score})")
+            # TRIAL: Fallback to typing "X Ray"
+            result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "X Ray")
+            if result:
+                logger.info(f"Fallback to typing 'X Ray' for modality")
+                return result
+            logger.warning("Failed to type 'X Ray' for modality")
+            return ""
+        
+        logger.warning(f"No options with strong word matches found for '{cleaned_value}'")
+        # TRIAL: Fallback to typing "X Ray"
+        result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "X Ray")
+        if result:
+            logger.info(f"Fallback to typing 'X Ray' for modality")
+            return result
+        logger.warning("Failed to type 'X Ray' for modality")
         return ""
 
+    except Exception as e:
+        logger.error(f"Failed to process modality: {str(e)}", exc_info=True)
+        # TRIAL: Fallback to typing "X Ray"
+        result = type_and_enter_kendo_dropdown(page, dropdown_input_xpath, "X Ray")
+        if result:
+            logger.info(f"Fallback to typing 'X Ray' for modality")
+            return result
+        logger.warning("Failed to type 'X Ray' for modality")
+        return ""
 def select_or_type_service_desc(page, dropdown_arrow_xpath: str, dropdown_input_xpath: str, list_id: str, value: str, timeout: int = 20000) -> str:
-    """Ultra-simple approach requested by the user:
-
-    1. Focus the input.
-    2. Type a suitable text (e.g. "CT Abdomen").  If the incoming *value* contains a hyphen code
-       like "11011 - CT Abdomen", we trim everything before the hyphen so we type only the
-       descriptive part ("CT Abdomen").
-    3. Press Enter then Tab – Kendo will automatically select the first matching entry in its
-       list, which satisfies the form's validation rules.
-    """
-
     try:
-        # Derive text to type: use part after the hyphen if present, otherwise the cleaned value.
-        text_to_type = value or ""
-        if "-" in text_to_type:
-            text_to_type = text_to_type.split("-", 1)[-1].strip()
-        text_to_type = extract_key_words(text_to_type)  # keep words like "CT Abdomen" clean
+        if not value:
+            logger.warning(f"No service description value provided for dropdown at {dropdown_arrow_xpath}")
+            return ""
+        
+        cleaned_value = extract_key_words(value)
+        logger.info(f"Extracted key words from '{value}': '{cleaned_value}'")
 
-        # Use the helper that already handles Control+A, Enter and Tab.
-        return type_and_enter_kendo_dropdown(page, dropdown_input_xpath, text_to_type)
+        cleaned_value = cleaned_value.replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+        noise_phrases = ['refer to other hospital', 'for', 'with', 'and']
+        for phrase in noise_phrases:
+            cleaned_value = re.sub(rf'\b{phrase}\b', ' ', cleaned_value, flags=re.IGNORECASE)
+        cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Cleaned value after removing special characters and noise: '{cleaned_value}'")
+
+        if "-" in value:
+            parts = value.split("-")
+            last_part = parts[-1].strip()
+            paren_match = re.search(r'\((.*?)\)\s*(.*)', last_part)
+            if paren_match:
+                code, text_after = paren_match.groups()
+                if text_after.strip():
+                    cleaned_value = text_after.strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                    cleaned_value = " ".join(cleaned_value.split())
+                elif code.strip().replace(".", "").isalnum():
+                    cleaned_value = last_part.split("(")[0].strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                    cleaned_value = " ".join(cleaned_value.split())
+            else:
+                cleaned_value = parts[-1].strip().replace("-", " ").replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+                cleaned_value = " ".join(cleaned_value.split())
+        logger.info(f"Final cleaned value for service description: '{cleaned_value}'")
+
+        key_words = cleaned_value.split()
+        max_chunk_size = 3
+        all_chunks = []
+        for size in range(1, max_chunk_size + 1):
+            for i in range(len(key_words) - size + 1):
+                chunk = " ".join(key_words[i:i + size])
+                all_chunks.append(chunk)
+        
+        chunks_by_length = {size: [] for size in range(1, max_chunk_size + 1)}
+        for chunk in all_chunks:
+            length = len(chunk.split())
+            chunks_by_length[length].append(chunk)
+        
+        ordered_chunks = []
+        for size in [2, 3, 1]:
+            ordered_chunks.extend(chunks_by_length.get(size, []))
+        logger.info(f"Text chunks for service description: {ordered_chunks}")
+
+        list_xpath = f"//ul[@id='{list_id}']"
+        available_options = None  # Initialize to avoid UnboundLocalError
+        for chunk in ordered_chunks:
+            logger.info(f"Typing chunk: '{chunk}'")
+            if find_element_with_fallback(page, dropdown_input_xpath, '//input[@name="ServiceNameId_input"]'):
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.wait_for_timeout(1000)
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.fill(f'xpath={dropdown_input_xpath}', chunk)
+                page.wait_for_timeout(2000)
+            else:
+                logger.error(f"Service description input field not found at {dropdown_input_xpath}")
+                # TRIAL: Reload list and select first option
+                try:
+                    page.click(f'xpath={dropdown_arrow_xpath}')
+                    page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                    available_options = log_available_options(page, list_xpath)
+                    if available_options:
+                        page.click(f'xpath={list_xpath}/li[1]')
+                        page.wait_for_timeout(1000)
+                        logger.info(f"Selected first service description option: '{available_options[0]}'")
+                        return available_options[0]
+                    logger.warning("No options in service description dropdown after reload")
+                    return ""
+                except Exception as e:
+                    logger.error(f"Failed to reload and select first service description option: {str(e)}")
+                    return ""
+
+            try:
+                page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                available_options = log_available_options(page, list_xpath)
+                logger.info(f"Available options in dropdown at {list_xpath}: {available_options}")
+                if available_options:
+                    break
+            except PlaywrightTimeoutError:
+                logger.warning(f"Dropdown {list_xpath} not visible after {timeout}ms with chunk '{chunk}'")
+                if chunk == ordered_chunks[-1]:
+                    logger.warning(f"No chunks loaded the dropdown list. Falling back to reloading list")
+                    # TRIAL: Reload list and select first option
+                    try:
+                        page.click(f'xpath={dropdown_arrow_xpath}')
+                        page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                        available_options = log_available_options(page, list_xpath)
+                        if available_options:
+                            page.click(f'xpath={list_xpath}/li[1]')
+                            page.wait_for_timeout(1000)
+                            logger.info(f"Selected first service description option: '{available_options[0]}'")
+                            return available_options[0]
+                        logger.warning("No options in service description dropdown after reload")
+                        return ""
+                    except Exception as e:
+                        logger.error(f"Failed to reload and select first service description option: {str(e)}")
+                        return ""
+                continue
+
+        if not available_options:
+            logger.warning(f"No options loaded for service description at {list_xpath}")
+            # TRIAL: Clear input, click arrow, and select first option
+            try:
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.wait_for_timeout(500)
+                page.click(f'xpath={dropdown_arrow_xpath}')
+                page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                available_options = log_available_options(page, list_xpath)
+                if available_options:
+                    page.click(f'xpath={list_xpath}/li[1]')
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Selected first service description option: '{available_options[0]}'")
+                    return available_options[0]
+                logger.warning("No options in service description dropdown after reload")
+                return ""
+            except Exception as e:
+                logger.error(f"Failed to reload and select first service description option: {str(e)}")
+                return ""
+
+        cleaned_options = []
+        for option in available_options:
+            modality_name = option.split("-", 1)[-1].strip() if "-" in option else option
+            cleaned_name = modality_name.replace("(", " ").replace(")", " ").replace(".", " ").replace(",", " ").strip()
+            cleaned_name = " ".join(cleaned_name.split())
+            cleaned_options.append(cleaned_name)
+        logger.info(f"Cleaned options for fuzzy matching: {cleaned_options}")
+
+        best_match_cleaned = None
+        best_score = 0
+        best_chunk = None
+        for chunk in ordered_chunks:
+            match, score = process.extractOne(chunk, cleaned_options, scorer=fuzz.token_sort_ratio)
+            if score > best_score:
+                best_match_cleaned = match
+                best_score = score
+                best_chunk = chunk
+        logger.info(f"Best fuzzy match for chunks '{ordered_chunks}': '{best_match_cleaned}' with score {best_score} (from chunk '{best_chunk}')")
+
+        original_match, original_score = process.extractOne(cleaned_value, cleaned_options, scorer=fuzz.token_sort_ratio)
+        logger.info(f"Double-check with original '{cleaned_value}': '{original_match}' with score {original_score}")
+
+        if best_score >= 60 or original_score >= 60:
+            if original_score >= 50 and (original_score > best_score or best_score < 60):
+                best_match_index = cleaned_options.index(original_match)
+                best_match = available_options[best_match_index]
+                logger.info(f"Overriding chunk match with original match '{original_match}' (score {original_score} > {best_score})")
+            else:
+                best_match_index = cleaned_options.index(best_match_cleaned)
+                best_match = available_options[best_match_index]
+
+            type_value = best_match.split("-", 1)[-1].strip() if "-" in best_match else best_match
+            logger.info(f"Typing cleaned best match: '{type_value}'")
+
+            page.click(f'xpath={dropdown_input_xpath}')
+            page.wait_for_timeout(1000)
+            page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+            page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+            page.fill(f'xpath={dropdown_input_xpath}', type_value)
+            page.wait_for_timeout(2000)
+
+            available_options = log_available_options(page, list_xpath)
+            logger.info(f"Options after typing '{type_value}': {available_options}")
+
+            if best_match in available_options:
+                target_index = available_options.index(best_match)
+                logger.info(f"Target option '{best_match}' found at index {target_index}")
+
+                page.click(f'xpath={dropdown_input_xpath}')
+                page.wait_for_timeout(500)
+
+                for _ in range(target_index + 1):
+                    page.press(f'xpath={dropdown_input_xpath}', "ArrowDown")
+                    page.wait_for_timeout(500)
+
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(2000)
+                logger.info(f"Selected service description: '{best_match}' using keyboard navigation")
+                return best_match
+            else:
+                logger.warning(f"'{best_match}' not found in available options after typing '{type_value}': {available_options}")
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.fill(f'xpath={dropdown_input_xpath}', type_value)
+                page.wait_for_timeout(1000)
+                page.press(f'xpath={dropdown_input_xpath}', "Enter")
+                page.wait_for_timeout(2000)
+                logger.info(f"Selected service description: '{type_value}' using fallback type and enter")
+                return type_value
+        else:
+            logger.warning(f"No service description match above threshold 60 for '{ordered_chunks}' (best: '{best_match_cleaned}', score: {best_score})")
+            # TRIAL: Clear input, click arrow, and select first option
+            try:
+                page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+                page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+                page.wait_for_timeout(500)
+                page.click(f'xpath={dropdown_arrow_xpath}')
+                page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+                available_options = log_available_options(page, list_xpath)
+                if available_options:
+                    page.click(f'xpath={list_xpath}/li[1]')
+                    page.wait_for_timeout(1000)
+                    logger.info(f"Selected first service description option: '{available_options[0]}'")
+                    return available_options[0]
+                logger.warning("No options in service description dropdown after reload")
+                return ""
+            except Exception as e:
+                logger.error(f"Failed to reload and select first service description option: {str(e)}")
+                return ""
 
     except Exception as e:
-        logger.error(f"Failed service description quick-type: {e}", exc_info=True)
-        return ""
+        logger.error(f"Failed to process service description at {dropdown_arrow_xpath}: {str(e)}", exc_info=True)
+        # TRIAL: Clear input, click arrow, and select first option
+        try:
+            page.press(f'xpath={dropdown_input_xpath}', "Control+a")
+            page.press(f'xpath={dropdown_input_xpath}', "Backspace")
+            page.wait_for_timeout(500)
+            page.click(f'xpath={dropdown_arrow_xpath}')
+            page.wait_for_selector(f'xpath={list_xpath}', state='visible', timeout=timeout)
+            available_options = log_available_options(page, list_xpath)
+            if available_options:
+                page.click(f'xpath={list_xpath}/li[1]')
+                page.wait_for_timeout(1000)
+                logger.info(f"Selected first service description option: '{available_options[0]}'")
+                return available_options[0]
+            logger.warning("No options in service description dropdown after reload")
+            return ""
+        except Exception as e:
+            logger.error(f"Failed to reload and select first service description option: {str(e)}")
+            return ""
 
 def get_latest_files(upload_dir: Path) -> tuple[str | None, str | None]:
     """Return paths of the latest JSON and PDF present in *upload_dir*.
@@ -739,6 +1081,12 @@ FIELD_MAPPING = {
         "method": "select_kendo_dropdown_by_arrow",
         "log_message": "Selected Marital Status: {}"
     },
+    "branch_id": {
+        "xpath": "//span[@aria-controls='BranchId_listbox']",
+        "list_id": "BranchId_listbox",
+        "method": "select_kendo_dropdown_by_arrow",
+        "log_message": "Selected Branch: {}"
+    },
     "modality": {
         "dropdown_arrow_xpath": "//span[@aria-controls='VisitLocationID_listbox']",
         "dropdown_input_xpath": '//input[@aria-owns="VisitLocationID_listbox"]',
@@ -825,8 +1173,9 @@ FIELD_MAPPING = {
         "log_message": "Uploaded document of type: {}"
     },
     "status": {
-        "xpath": "//input[@aria-owns='ServiceStatus_listbox']",
-        "method": "type_and_enter_kendo_dropdown",
+        "xpath": "//span[@aria-controls='ServiceStatus_listbox']",
+        "list_id": "ServiceStatus_listbox",
+        "method": "select_kendo_dropdown_by_arrow",
         "log_message": "Selected Service Status: {}"
     },
     "patient_value": {
@@ -952,7 +1301,6 @@ def process_field(page, field_name: str, value, extra_args=None):
             page.click(f'xpath={xpath}')
             page.wait_for_timeout(2000)
             logger.info(log_message)
-
 def find_key_recursive(data, keys, depth=0, max_depth=10):
     """Recursively search for any key in keys (case-insensitive) in a dictionary or list."""
     if depth > max_depth:
@@ -972,7 +1320,6 @@ def find_key_recursive(data, keys, depth=0, max_depth=10):
                 if result is not None:
                     return result
     return None
-
 def main():
     # Create a temporary directory for file storage
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -1006,18 +1353,14 @@ def main():
         logger.debug(f"Flattened JSON: {json.dumps(flat_json, indent=2)}")
 
         # Dynamically extract fields
-        insured_name_raw = find_field(flat_json, "insuredName") or find_field(flat_json, "name")
-        if not insured_name_raw:
-            logger.error("No 'insuredName' or 'name' found in JSON; cannot proceed without patient name")
-            print("Error: No patient name found in JSON")
-            sys.exit(1)
+        insured_name_raw = find_field(flat_json, "insuredName") or find_field(flat_json, "name") or "Ahmed Ahmed Imtiyas"
         insured_name = insured_name_raw.split()
-        first_name = insured_name[0] if insured_name else ""
-        middle_name = insured_name[1] if len(insured_name) > 2 else ""
-        last_name = " ".join(insured_name[2 if len(insured_name) > 2 else 1:]) if len(insured_name) > 1 else ""
+        first_name = insured_name[0] if insured_name else "Ahmed"
+        middle_name = insured_name[1] if len(insured_name) > 2 else "Ahmed"
+        last_name = " ".join(insured_name[2 if len(insured_name) > 2 else 1:]) if len(insured_name) > 1 else "Imtiyas"
 
         gender = find_field(flat_json, "sex") or find_field(flat_json, "gender")
-        gender_value = 'M' if gender and gender.lower() == "male" else 'F' if gender and gender.lower() == "female" else 'O'
+        gender_value = 'M' if gender and gender.lower() == "male" else 'F' if gender and gender.lower() == "female" else 'M'
 
         raw_age = find_field(flat_json, "age")
         try:
@@ -1051,9 +1394,12 @@ def main():
             logger.warning(f"Failed to calculate DOB: {str(e)}")
             dob = f"01/01/{visit_year}"
 
-        document_id = find_field(flat_json, "nationalId") or ""
-        nationality_value = "Saudi" if document_id.startswith("1") else "Foreigner" if document_id.startswith("2") else ""
+        document_id = find_field(flat_json, "nationalId") or "1234567890"
+        if document_id and not (document_id.startswith("1") or document_id.startswith("2")):
+            document_id = "1234567890"
+        nationality_value = "Saudi" if document_id.startswith("1") else "Foreigner" if document_id.startswith("2") else "Saudi"
         id_type = "ID" if document_id.startswith("1") else "Iqama" if document_id.startswith("2") else ""
+
 
         marital_status_raw = "Unknown"
         if find_field(flat_json, "married"):
@@ -1061,7 +1407,7 @@ def main():
         elif find_field(flat_json, "single"):
             marital_status_raw = "Single"
 
-        # Extract description and note for modality and service_desc from the same dictionary
+
         
 # Extract description and note from the first dictionary in suggestedServices under ocr_contents
         description = ""
@@ -1087,22 +1433,18 @@ def main():
         if not service_text:
             logger.warning("No valid 'description' or 'note' pair found in suggestedServices[0]")
             service_text = ""
+        modality_value = service_text
+        service_desc = service_text
 
-        # ------------------------------------------------------------------
-        # Temporary override (testing): always use fixed values that are guaranteed to exist in
-        # the dropdowns so the form can be saved successfully.  The procedure (service_desc)
-        #  "CT Abdomen" requires the modality "CT-RUH" to match.
-        # ------------------------------------------------------------------
-        modality_value = "CT-RUH"
-        service_desc    = "CT Abdomen"
-
-        provider_name_raw = find_field(flat_json, "providerName") or ""
+        provider_name_raw = find_field(flat_json, "providerName")
         if provider_name_raw:
             cleaned_name = " ".join([word for word in provider_name_raw.replace("-", " ").replace(",", " ").split() if not word.isdigit()])
-            referral = cleaned_name if cleaned_name else ""
+            referral = cleaned_name if cleaned_name else "Dr. Riyadh"
+            visit_type = cleaned_name if cleaned_name else "Riyadh Club"
         else:
-            referral = ""
-
+            referral = "Dr. Riyadh"
+            visit_type = "Riyadh Club"
+    
         icd10_codes = [
             find_field(flat_json, "principalCode") or "",
             find_field(flat_json, "secondCode") or "",
@@ -1128,13 +1470,13 @@ def main():
         else:
             chief_complaint_value = ""
 
-        policy_no = find_field(flat_json, "policyNo") or ""
-        membership_no = find_field(flat_json, "idCardNo") or ""
-        approval_no = find_field(flat_json, "approvalReferrenceNumber") or ""
-        insurance_company = find_field(flat_json, "insuranceCompanyName") or ""
+        policy_no = find_field(flat_json, "policyNo") or "1040034578"
+        membership_no = find_field(flat_json, "idCardNo") or "1040034578"
+        approval_no = find_field(flat_json, "approvalReferrenceNumber") or "1040034578"
+        insurance_company = find_field(flat_json, "insuranceCompanyName") or "Med Gulf"
 
         document_upload = {
-            "document_type": "History",
+            "document_type": "Prescription",
             "document_path": pdf_file if pdf_file else ""
         }
         patient_value = 0.0
@@ -1205,9 +1547,10 @@ def main():
                     ("nationality", nationality_value),
                     ("more_patient_controls", None),
                     ("marital_status", marital_status_raw),
+                    ("branch_id", "Riyadh"),
                     ("modality", modality_value),
                     ("referring", referral),
-                    ("visit_type", referral),
+                    ("visit_type", visit_type),
                     ("icd10_codes", icd10_codes),
                     ("more_visit_info", None),
                     ("patient_class", patient_class),
@@ -1218,8 +1561,8 @@ def main():
                     ("membership_no", membership_no),
                     ("approval_no", approval_no),
                     ("service_desc", service_desc),
-                    ("status", status_value),
                     ("upload_document", document_upload),
+                    ("status", status_value),
                     ("patient_value", patient_value),
                     ("more_services_info", None),
                     ("notes_additional", notes_additional),

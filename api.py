@@ -38,10 +38,15 @@ OUTPUTS_DIR = "outputs"
 os.makedirs(TEMP_DIR, exist_ok=True)
 os.makedirs(OUTPUTS_DIR, exist_ok=True)
 
-MICLINIC_UPLOAD_DIR = Path("./uploads")
+# Use absolute paths anchored at the directory that contains api.py so
+# background tasks have consistent locations regardless of the working
+# directory the server is started from.
+BASE_DIR = Path(__file__).resolve().parent
+
+MICLINIC_UPLOAD_DIR = (BASE_DIR / "uploads").resolve()
 MICLINIC_UPLOAD_DIR.mkdir(exist_ok=True)
 
-ARCHIVE_ROOT = Path("./archives")
+ARCHIVE_ROOT = (BASE_DIR / "archives").resolve()
 ARCHIVE_ROOT.mkdir(exist_ok=True)
 
 logging.basicConfig(
@@ -68,7 +73,11 @@ def _cleanup_after_send(paths: List[Path]):
         try:
             target = date_dir / p.name
             shutil.move(str(p), target)
-            logger.info(f"Archived processed file → {target}")
+            # Log the absolute path or relative to archive root to avoid Path errors
+            try:
+                logger.info(f"Archived processed file → {target.relative_to(Path.cwd())}")
+            except Exception:
+                logger.info(f"Archived processed file → {target}")
         except Exception as exc:
             logger.error(f"Failed to archive {p}: {exc}")
 

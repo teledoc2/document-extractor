@@ -1,0 +1,273 @@
+{
+  "file_name": "UCAF 1.pdf",
+  "patient_name": "h_a_abdullah",
+  "page_count": 2,
+  "pages": [
+    {
+      "file_name": "temp_b7ec90c7-3dfe-49a3-802e-8ef6959d2a63_page_1.md",
+      "topics": [
+        "medical_form"
+      ],
+      "languages": [
+        "English",
+        "Arabic"
+      ],
+      "ocr_contents": {
+        "provider": {
+          "providerName": "Consultant Radiologists (Riyadh Scan)",
+          "insuranceCompanyName": "Malath",
+          "tpaCompanyName": "",
+          "patientFileNumber": "",
+          "dept": "Radiology Specialty",
+          "single": false,
+          "married": false,
+          "planType": "",
+          "dateOfVisit": "28/04/2025 08:14:00 PM",
+          "walkIn": false,
+          "approvalDateTime": "28/04/2025 20:16:47",
+          "approvalValidity": "7 Days"
+        },
+        "insured": {
+          "insuredName": "hasan abdullah awadh abdullah",
+          "idCardNo": "002303488437001",
+          "nationalId": "2303488437",
+          "policyNo": "24559892",
+          "memberSince": "",
+          "memberType": "",
+          "expiryDate": "14/08/2025 12:00:00 AM",
+          "policyHolder": "Precious Jewels Foundation for Precious Metals",
+          "approval": "",
+          "approvalReferrenceNumber": "39542420",
+          "approvalStatus": "Approved",
+          "approvalType": "Professional",
+          "message": "THE REQUESTED SERVICE DOES NOT REQUIRE PRIOR APPROVAL. PLEASE FOLLOW CONTRACT TERMS CONDITIONS AND EXCLUSIONS.",
+          "adjudicationPayer": "Additional adjudication Payer",
+          "payer": ""
+        },
+        "patient": {
+          "sex": "Male",
+          "age": "33 Year",
+          "gender": ""
+        },
+        "visitDetails": {
+          "inpatient": false,
+          "outpatient": true,
+          "emergencyCase": false,
+          "emergencyCareLevel": "",
+          "physicianName": "KHALED ALY",
+          "bp": "-",
+          "pulse": "",
+          "temperature": "34.5",
+          "weight": "",
+          "height": "",
+          "rr": "",
+          "durationOfIllness": "",
+          "chiefComplaints": "Dear dr .ptn referred from another provider for ct scan",
+          "significantSigns": "",
+          "possibleLineOfTreatment": "",
+          "otherConditions": ""
+        },
+        "diagnosis": {
+          "diagnosis": "",
+          "principalCode": "G44-Other headache syndromes",
+          "secondCode": "",
+          "thirdCode": "",
+          "fourthCode": "",
+          "fifthCode": "",
+          "sixthCode": ""
+        },
+        "management": {
+          "congenital": false,
+          "workRelated": false
+        },
+        "services": [
+          {
+            "note": "Approved"
+          }
+        ],
+        "completedBy": {
+          "providerApproval": "",
+          "completedCodedBy": "",
+          "signature": "",
+          "date": ""
+        },
+        "medications": [
+          {
+            "medicationName": "",
+            "type": "",
+            "note": ""
+          }
+        ],
+        "caseManagementForm": {
+          "caseManagementFormIncluded": false,
+          "possibleLineOfManagement": "",
+          "expectedDateOfAdmission": "",
+          "estimatedCost": 287.5,
+          "estimatedGross": 250.0,
+          "totalApprovedCost": 287.5,
+          "estimatedLengthOfStay": "",
+          "approvedLengthOfStay": "",
+          "providerComments": ""
+        },
+        "certification": {
+          "physicianCertification": "",
+          "physicianSignatureDate": "",
+          "patientCertification": "",
+          "patientSignatureDate": "",
+          "patientRelationship": ""
+        },
+        "insuranceApproval": {
+          "approved": true,
+          "notApproved": false,
+          "approvalNo": "39542420",
+          "approvalValidity": "7 Days",
+          "comments": "",
+          "approvedDisapprovedBy": "",
+          "signature": "",
+          "date": ""
+        },
+        "suggestedServices": [
+          {
+            "code": "56001-00-00",
+            "description": "computerised tomo",
+            "additionalCodes": [],
+            "grossAmount": null,
+            "serviceType": "graphy of brain - (11001) ct brain",
+            "note": "1.0"
+          },
+          {
+            "code": "",
+            "description": "287.5",
+            "additionalCodes": [],
+            "grossAmount": 1.0,
+            "serviceType": "250.00",
+            "note": "287.5"
+          },
+          {
+            "code": "",
+            "description": "287.50",
+            "additionalCodes": [],
+            "grossAmount": null,
+            "serviceType": "approved",
+            "note": "providers approval/coding staff must review/code the recommended service(s) and allocate cost and complete the following:"
+          }
+        ]
+      },
+      "document_type": "UCAF Medical Form",
+      "confidence_score": 0.95
+    },
+    {
+      "file_name": "temp_b7ec90c7-3dfe-49a3-802e-8ef6959d2a63_page_2.md",
+      "topics": [
+        "medical_form"
+      ],
+      "languages": [
+        "English",
+        "Arabic"
+      ],
+      "ocr_contents": {
+        "provider": {
+          "providerName": "",
+          "insuranceCompanyName": "",
+          "tpaCompanyName": "",
+          "patientFileNumber": "",
+          "dept": "",
+          "planType": "",
+          "dateOfVisit": "",
+          "approvalDateTime": "",
+          "approvalValidity": ""
+        },
+        "insured": {
+          "insuredName": "",
+          "idCardNo": "",
+          "nationalId": "",
+          "policyNo": "",
+          "memberSince": "",
+          "memberType": "",
+          "expiryDate": "",
+          "policyHolder": "",
+          "class_": "",
+          "approval": "",
+          "approvalReferrenceNumber": "",
+          "approvalStatus": "",
+          "approvalType": "",
+          "message": "",
+          "adjudicationPayer": "",
+          "payer": ""
+        },
+        "patient": {
+          "sex": "",
+          "age": "",
+          "gender": ""
+        },
+        "visitDetails": {
+          "emergencyCareLevel": "",
+          "physicianName": "",
+          "bp": "",
+          "pulse": "",
+          "temperature": "",
+          "weight": "",
+          "height": "",
+          "rr": "",
+          "durationOfIllness": "",
+          "chiefComplaints": "",
+          "significantSigns": "",
+          "possibleLineOfTreatment": "",
+          "otherConditions": ""
+        },
+        "diagnosis": {
+          "diagnosis": "",
+          "principalCode": "",
+          "secondCode": "",
+          "thirdCode": "",
+          "fourthCode": "",
+          "fifthCode": "",
+          "sixthCode": ""
+        },
+        "management": {},
+        "services": [
+          {
+            "note": ""
+          }
+        ],
+        "completedBy": {
+          "providerApproval": "",
+          "completedCodedBy": "",
+          "signature": "",
+          "date": ""
+        },
+        "medications": [
+          {
+            "medicationName": "",
+            "type": "",
+            "note": ""
+          }
+        ],
+        "caseManagementForm": {
+          "possibleLineOfManagement": "",
+          "expectedDateOfAdmission": "",
+          "estimatedLengthOfStay": "",
+          "approvedLengthOfStay": "",
+          "providerComments": ""
+        },
+        "certification": {
+          "physicianCertification": "",
+          "physicianSignatureDate": "",
+          "patientCertification": "",
+          "patientSignatureDate": "",
+          "patientRelationship": ""
+        },
+        "insuranceApproval": {
+          "approvalNo": "",
+          "approvalValidity": "",
+          "comments": "",
+          "approvedDisapprovedBy": "",
+          "signature": "",
+          "date": ""
+        }
+      },
+      "document_type": "UCAF Medical Form",
+      "confidence_score": 0.95
+    }
+  ]
+}

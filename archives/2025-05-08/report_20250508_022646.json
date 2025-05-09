@@ -1,0 +1,178 @@
+{
+  "documentId": "501e5ca6-2289-45aa-accb-82d170da9a5b",
+  "documentName": "saudi-form-4.jpeg",
+  "summary": "Analysis of document \"saudi-form-4.jpeg\"",
+  "fileInfo": {
+    "original_name": "saudi-form-4.jpeg",
+    "patient_name": "a_a_imtiyas",
+    "file_id": "67af4172-4c46-4dab-bc92-58dffaa3d789",
+    "date": "2025-05-08"
+  },
+  "data": {
+    "file_name": "temp_67af4172-4c46-4dab-bc92-58dffaa3d789.md",
+    "topics": [
+      "medical_form"
+    ],
+    "languages": [
+      "English",
+      "Arabic"
+    ],
+    "ocr_contents": {
+      "provider": {
+        "providerName": "Consultant Radiologists (Riyadh Scan)",
+        "insuranceCompanyName": "Alrajhi Takaful",
+        "tpaCompanyName": "",
+        "patientFileNumber": "",
+        "dept": "Radiology Specialty",
+        "single": false,
+        "married": false,
+        "planType": "",
+        "dateOfVisit": "01/03/2025 10:15:00 AM",
+        "newVisit": false,
+        "followUp": false,
+        "refill": false,
+        "walkIn": false,
+        "referral": false,
+        "approvalDateTime": "01/03/2025 10:18:45",
+        "approvalValidity": "30 Days"
+      },
+      "insured": {
+        "insuredName": "aakif ahamed samsudeen imtiyas",
+        "idCardNo": "9955697",
+        "nationalId": "2423850268",
+        "policyNo": "1040034578",
+        "memberSince": "",
+        "memberType": "",
+        "expiryDate": "26/08/2025 12:00:00 AM",
+        "policyHolder": "مدارس مناهج الابداع العالمية",
+        "approval": "Approved",
+        "approvalReferrenceNumber": "5090041",
+        "approvalStatus": "Approved",
+        "approvalType": "Professional",
+        "message": "No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions claim audit",
+        "adjudicationPayer": "No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions & claim audit",
+        "payer": ""
+      },
+      "patient": {
+        "sex": "Male",
+        "age": "8 Year",
+        "gender": ""
+      },
+      "visitDetails": {
+        "inpatient": false,
+        "outpatient": true,
+        "emergencyCase": false,
+        "emergencyCareLevel": "",
+        "physicianName": "KHALED ALY",
+        "bp": "-",
+        "pulse": "",
+        "temperature": "34.5",
+        "weight": "",
+        "height": "",
+        "rr": "",
+        "durationOfIllness": "",
+        "chiefComplaints": "DIMINISHED VISYAL ACUITY DAYS FOLLWING RYPTURE",
+        "significantSigns": "",
+        "possibleLineOfTreatment": "",
+        "otherConditions": ""
+      },
+      "diagnosis": {
+        "diagnosis": "",
+        "principalCode": "H05-Disorders of orbit",
+        "secondCode": "",
+        "thirdCode": "",
+        "fourthCode": "",
+        "fifthCode": "",
+        "sixthCode": ""
+      },
+      "management": {
+        "chronic": false,
+        "congenital": false,
+        "rta": false,
+        "workRelated": false,
+        "vaccination": false,
+        "checkUp": false,
+        "psychiatric": false,
+        "infertility": false,
+        "pregnancy": false
+      },
+      "services": [
+        {
+          "note": "Approved - - No: prior approval required \"Its\" a system generated response please proceed as per policy terms and conditions claim audit"
+        }
+      ],
+      "completedBy": {
+        "providerApproval": "",
+        "completedCodedBy": "",
+        "signature": "",
+        "date": ""
+      },
+      "medications": [
+        {
+          "medicationName": "",
+          "type": "",
+          "note": "No: Data To Be Shown"
+        }
+      ],
+      "caseManagementForm": {
+        "caseManagementFormIncluded": false,
+        "possibleLineOfManagement": "",
+        "expectedDateOfAdmission": "",
+        "estimatedCost": 316.28,
+        "estimatedGross": 700,
+        "totalApprovedCost": 200,
+        "estimatedLengthOfStay": "",
+        "approvedLengthOfStay": "",
+        "providerComments": ""
+      },
+      "certification": {
+        "physicianCertification": "",
+        "physicianSignature": false,
+        "physicianSignatureDate": "",
+        "patientCertification": "",
+        "patientSignature": false,
+        "patientSignatureDate": "",
+        "patientRelationship": ""
+      },
+      "insuranceApproval": {
+        "approved": true,
+        "notApproved": false,
+        "approvalNo": "5090041",
+        "approvalValidity": "30 Days",
+        "comments": "",
+        "approvedDisapprovedBy": "",
+        "signature": "",
+        "date": ""
+      },
+      "suggestedServices": [
+        {
+          "code": "56013-00-00",
+          "description": "computerised tomo",
+          "additionalCodes": [],
+          "grossAmount": null,
+          "serviceType": "imaging",
+          "note": "1.0"
+        },
+        {
+          "code": "",
+          "description": "316.28",
+          "additionalCodes": [],
+          "grossAmount": 200,
+          "serviceType": "700.00",
+          "note": "200.00"
+        },
+        {
+          "code": "",
+          "description": "approved - - no prior approval required its a",
+          "additionalCodes": [],
+          "grossAmount": 1,
+          "serviceType": "sorvicos",
+          "note": "system gonerated response please proceed as"
+        }
+      ]
+    },
+    "document_type": "UCAF Medical Form",
+    "confidence_score": 0.95
+  },
+  "generatedAt": "2025-05-08T07:26:26.831Z"
+}
